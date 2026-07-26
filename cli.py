@@ -12,7 +12,7 @@ from agent import Agent  # noqa: E402  (after load_dotenv on purpose)
 
 def main() -> None:
     agent = Agent()
-    print("Payment Agent CLI — type 'quit' to leave.\n")
+    print("Payment Agent CLI - type 'quit' to leave.\n")
     print(f"Agent: {agent.next('Hi')['message']}")
     while True:
         try:

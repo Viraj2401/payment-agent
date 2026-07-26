@@ -2,14 +2,14 @@
 
 Two layers:
 
-1. DeterministicExtractor — regex + date parsing + number words. Fully
+1. DeterministicExtractor - regex + date parsing + number words. Fully
    offline, fully reproducible. Handles every example in the assignment
    spec. This is also the safety net that keeps the agent functional
    (and tests deterministic) when no LLM key is configured.
 
-2. LLMExtractor — optional Gemini Flash call (temperature 0) that fills
-   the same schema for phrasings the rules miss. Output is merged with —
-   and validated by — the deterministic layer; the LLM never controls
+2. LLMExtractor - optional Gemini Flash call (temperature 0) that fills
+   the same schema for phrasings the rules miss. Output is merged with -
+   and validated by - the deterministic layer; the LLM never controls
    flow, it only proposes field values.
 """
 
@@ -182,11 +182,11 @@ class DeterministicExtractor:
                 out.expiry_month = _MONTHS[m.group(1)]
                 out.expiry_year = int(m.group(2))
 
-        # dob — only if the text contains something actually date-shaped
+        # dob - only if the text contains something actually date-shaped
         # (a bare number like "4321" must never be read as a date)
         out.dob = self._parse_dob(t, low)
 
-        # aadhaar / pincode / cvv — labelled
+        # aadhaar / pincode / cvv - labelled
         # ("last 4"/"last four" phrasing means we can't anchor on position;
         #  take the final standalone 4-digit group in an aadhaar-mentioning message)
         if re.search(r"aadhaa?r", low):
@@ -216,7 +216,7 @@ class DeterministicExtractor:
                 out.pincode = cand
         elif state == "COLLECT_CARD":
             # A bare number is a CVV only when the message is *just* digits
-            # (or spoken digits) — otherwise "expires December 2027" would
+            # (or spoken digits) - otherwise "expires December 2027" would
             # have its year misread as a CVV.
             if not out.cvv and not out.card_number and out.expiry_month is None:
                 if re.fullmatch(r"[\d\s\-]+", t) and len(bare) in (3, 4):
@@ -224,7 +224,7 @@ class DeterministicExtractor:
                 elif spoken and len(spoken) in (3, 4) and not re.search(r"\d", t):
                     out.cvv = spoken
 
-        # names — card-specific patterns first, then generic ones
+        # names - card-specific patterns first, then generic ones
         card_name = self._parse_card_name(t)
         if card_name:
             out.cardholder_name = card_name
@@ -241,7 +241,7 @@ class DeterministicExtractor:
     # ── helpers ────────────────────────────────────────────
 
     # A DOB is only ever read from a date-SHAPED fragment. Bare numbers
-    # ("4321", "400001") must fall through to Aadhaar/pincode handling —
+    # ("4321", "400001") must fall through to Aadhaar/pincode handling -
     # a misparsed date would burn a strict-match verification attempt.
     DATE_PATTERNS = [
         r"\b\d{4}-\d{1,2}-\d{1,2}\b",                                        # 1990-05-14
@@ -307,7 +307,7 @@ class DeterministicExtractor:
 
     @staticmethod
     def _clean_name(raw: str) -> str:
-        # strip trailing hedges but DO NOT change casing — matching is strict
+        # strip trailing hedges but DO NOT change casing - matching is strict
         cleaned = re.sub(r"\b(i think|thanks|please|btw)\b.*$", "", raw, flags=re.IGNORECASE)
         return re.sub(r"\s+", " ", cleaned).strip(" .,!")
 
@@ -413,7 +413,7 @@ class Extractor:
       fields the LLM omitted (IDs, digits, dates, amounts, intents).
       Name fields are LLM-only in this mode: the rule heuristics can
       capture whole sentences as "names", and a wrong name burns a
-      strict-match verification attempt — a redundant re-ask is cheaper
+      strict-match verification attempt - a redundant re-ask is cheaper
       than a wrong value.
     """
 
@@ -428,7 +428,7 @@ class Extractor:
         if not self.llm.available:
             return rules
         llm = self.llm.extract(text, state)
-        if llm is None:  # transport/parse failure — fail soft to rules
+        if llm is None:  # transport/parse failure - fail soft to rules
             return rules
         for f in llm.__dataclass_fields__:
             if f in self.NAME_FIELDS:

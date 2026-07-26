@@ -99,7 +99,7 @@ class Agent:
 
     def _stash(self, ex: Extracted) -> None:
         """Remember everything the user volunteers, in any order. Values
-        are *used* only when their step arrives — steps are never skipped."""
+        are *used* only when their step arrives - steps are never skipped."""
         for f in self.slots:
             val = getattr(ex, f, None)
             if val is not None and self.slots[f] is None:
@@ -222,7 +222,7 @@ class Agent:
         if balance <= 0:
             self.state = State.DONE
             return self._say(
-                "You're verified. Good news — your outstanding balance is ₹0.00, so there's "
+                "You're verified. Good news - your outstanding balance is ₹0.00, so there's "
                 "nothing to pay today. Have a great day!"
             )
         msg = (
@@ -250,7 +250,7 @@ class Agent:
         check = v.validate_amount(float(amount), balance)
         if not check.ok:
             self.slots["amount"] = None
-            return self._say(f"{check.error} Your outstanding balance is ₹{balance:,.2f} — how much should I charge?")
+            return self._say(f"{check.error} Your outstanding balance is ₹{balance:,.2f} - how much should I charge?")
 
         self.state = State.COLLECT_CARD
         return self._h_card(ex)
@@ -285,7 +285,7 @@ class Agent:
         missing = [label for f, label in self.CARD_PROMPTS.items()
                    if s[f] is None or (f == "expiry_month" and s["expiry_year"] is None)]
         if len(missing) == 1:
-            return self._say(f"Almost there — I just need {missing[0]}.")
+            return self._say(f"Almost there - I just need {missing[0]}.")
         if missing:
             return self._say(
                 f"To take the payment of ₹{float(s['amount']):,.2f}, I'll need "
@@ -310,7 +310,7 @@ class Agent:
                 "'cancel' to stop here?"
             )
         if not ex.yes:
-            return self._say("Just to be safe — should I process the payment? Please reply yes or no.")
+            return self._say("Just to be safe - should I process the payment? Please reply yes or no.")
 
         s = self.slots
         result = self.api.process_payment(
@@ -340,7 +340,7 @@ class Agent:
                 f"Payment successful! ₹{float(s['amount']):,.2f} has been received. "
                 f"Your transaction ID is {self.transaction_id}. "
                 f"Remaining balance: ₹{remaining:,.2f}. "
-                "Thanks for taking care of this today — goodbye!"
+                "Thanks for taking care of this today - goodbye!"
             )
 
         return self._payment_api_error(result.error_code)
@@ -352,7 +352,7 @@ class Agent:
         fixable = {
             "invalid_card": ("card_number", "The card number was declined as invalid. Could you re-check and share it again?"),
             "invalid_cvv": ("cvv", "The CVV didn't go through. Could you share it again?"),
-            "invalid_expiry": ("expiry_month", "The expiry date was rejected — the card may be expired. Could you share the expiry again, or use a different card?"),
+            "invalid_expiry": ("expiry_month", "The expiry date was rejected - the card may be expired. Could you share the expiry again, or use a different card?"),
         }
         if code in fixable:
             field_, msg = fixable[code]
@@ -366,7 +366,7 @@ class Agent:
             self.state = State.ASK_AMOUNT
             balance = self.verification.account["balance"]
             return self._say(
-                f"That amount exceeds your outstanding balance. You owe ₹{balance:,.2f} — "
+                f"That amount exceeds your outstanding balance. You owe ₹{balance:,.2f} - "
                 "how much would you like to pay?"
             )
         if code == "invalid_amount":
@@ -406,7 +406,7 @@ class Agent:
             )
         self.state = State.DONE
         return self._say(
-            f"I'm still having trouble {doing} — it's on our side, not yours. "
+            f"I'm still having trouble {doing} - it's on our side, not yours. "
             "Please try again in a little while. Sorry for the inconvenience!"
         )
 

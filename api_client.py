@@ -34,7 +34,7 @@ class ApiResult:
     ok: bool
     data: Dict[str, Any] = field(default_factory=dict)
     error_code: Optional[str] = None   # a KNOWN_ERROR_CODES value when the API rejected us
-    transport_error: bool = False      # network/timeout/5xx — not the user's fault
+    transport_error: bool = False      # network/timeout/5xx - not the user's fault
 
 
 class ApiClient:
@@ -97,6 +97,6 @@ class ApiClient:
         code = body.get("error_code")
         if code in KNOWN_ERROR_CODES:
             return ApiResult(ok=False, data=body, error_code=code)
-        # 4xx with an unknown shape — treat as transport-ish so the agent
+        # 4xx with an unknown shape - treat as transport-ish so the agent
         # apologises rather than blaming the user.
         return ApiResult(ok=False, data=body, transport_error=True)

@@ -1,7 +1,7 @@
 # Payment Collection AI Agent
 
 A conversational agent that takes a user from account lookup through strict
-identity verification to a confirmed card payment — built for messy,
+identity verification to a confirmed card payment - built for messy,
 real-world language, with every consequential decision made by deterministic
 code rather than an LLM.
 
@@ -17,7 +17,7 @@ Agent: Payment successful! ₹500.00 has been received. Your transaction ID is t
 ```bash
 pip install -r requirements.txt
 
-# optional but recommended — enables LLM extraction of messy input:
+# optional but recommended - enables LLM extraction of messy input:
 cp .env.example .env        # then put your Gemini API key in .env
 
 python cli.py               # interactive chat
@@ -67,18 +67,18 @@ GREET → ACCOUNT_ID → VERIFY_NAME → VERIFY_FACTOR → ASK_AMOUNT
                                 (LOCKED on verification lockout)
 ```
 
-Users can volunteer information out of order at any point — it is stored in
+Users can volunteer information out of order at any point - it is stored in
 slots and consumed when its step arrives, so steps are never skipped and
 nothing is ever re-asked.
 
 ## Security behavior
 
 - Account data (DOB, Aadhaar, pincode, balance-before-verification) is
-  **never echoed** to the user — the agent only says whether *their* input matched.
+  **never echoed** to the user - the agent only says whether *their* input matched.
 - Verification is **strict**: exact name match (case-sensitive) plus one exact
   secondary factor. No fuzzy matching.
 - Card numbers only ever appear masked (`ending 0366`); card number and CVV
-  are **wiped from memory after every payment attempt** — a retry re-collects
+  are **wiped from memory after every payment attempt** - a retry re-collects
   the CVV by design.
 - Nothing invalid reaches the API: Luhn, CVV length, expiry, and amount are
   all validated client-side first.

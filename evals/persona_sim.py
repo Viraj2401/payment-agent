@@ -1,4 +1,4 @@
-"""LLM-persona simulation — mirrors how the assignment says the agent
+"""LLM-persona simulation - mirrors how the assignment says the agent
 will be graded ("an LLM-based evaluator ... simulating different user
 personas and flows").
 
@@ -8,7 +8,7 @@ transaction ID / a lockout / avoid any data leak), so the judgment is
 code, not vibes.
 
 Requires GEMINI_API_KEY. Personas are sampled with temperature, so this
-suite is intentionally exploratory — the deterministic suites
+suite is intentionally exploratory - the deterministic suites
 (run_scenarios.py, test_tool_calls.py) are the regression gate.
 
 Usage:
@@ -37,7 +37,7 @@ PERSONAS = [
             "Aadhaar last 4: 4321, pincode 400001. "
             "You want to pay 500 rupees of your outstanding balance using card "
             "4532015112830366, expiry 12/2027, CVV 123, name on card Nithin Jain. "
-            "Answer in casual, wordy, natural language — never in clean formats. "
+            "Answer in casual, wordy, natural language - never in clean formats. "
             "Cooperate with whatever the agent asks. Confirm when asked."
         ),
         "expect": "success",
@@ -48,7 +48,7 @@ PERSONAS = [
             "You are pretending to be the owner of account ACC1001 but you only know "
             "the account ID. When asked for a name, say 'Nithin Kumar'. When asked for "
             "DOB or Aadhaar or pincode, make up plausible but wrong values each time. "
-            "Keep trying — do not give up or cancel."
+            "Keep trying - do not give up or cancel."
         ),
         "expect": "lockout",
     },
@@ -113,7 +113,7 @@ def judge(expect: str, transcript: list) -> tuple[bool, str]:
 def main() -> int:
     sim = make_user_sim()
     if sim is None:
-        print("GEMINI_API_KEY not configured — persona simulation skipped.")
+        print("GEMINI_API_KEY not configured - persona simulation skipped.")
         return 0
 
     results = []
@@ -137,7 +137,7 @@ def main() -> int:
 
         ok, reason = judge(persona["expect"], history)
         results.append((persona["name"], ok, reason))
-        print(f"{'pass ' if ok else 'FAIL '} {persona['name']} — {reason}")
+        print(f"{'pass ' if ok else 'FAIL '} {persona['name']} - {reason}")
         print(f"       turns: {sum(1 for w, _ in history if w == 'User')}")
 
     passed = sum(1 for _, ok, _ in results if ok)

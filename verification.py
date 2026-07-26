@@ -2,7 +2,7 @@
 
 Spec: full name must match EXACTLY, plus at least one of DOB /
 Aadhaar-last-4 / pincode. No fuzzy matching. Account values are never
-surfaced to the user — we only ever say whether *their* input matched.
+surfaced to the user - we only ever say whether *their* input matched.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ class VerificationSession:
 
     def try_name(self, name: str) -> bool:
         """Exact match, case-sensitive, single-spaced. We normalize only
-        whitespace — casing and spelling must match the account record."""
+        whitespace - casing and spelling must match the account record."""
         ok = " ".join(name.split()) == self.account["full_name"]
         self._record(ok, is_name=True)
         return ok

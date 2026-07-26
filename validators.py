@@ -104,7 +104,7 @@ def validate_card_number(card_number: str) -> ValidationResult:
     if not re.fullmatch(r"\d{13,19}", card_number):
         return ValidationResult(False, "Card numbers are 13-19 digits.")
     if not luhn_ok(card_number):
-        return ValidationResult(False, "That card number doesn't pass the checksum — please re-check the digits.")
+        return ValidationResult(False, "That card number doesn't pass the checksum - please re-check the digits.")
     return ValidationResult(True)
 
 
